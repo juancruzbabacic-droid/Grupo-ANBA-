@@ -1,6 +1,6 @@
 // Datos de contacto: completar cuando estén definidos.
 // whatsapp: solo números con código de país, ej. "5491112345678"
-const CONTACTO = { whatsapp: "", email: "" };
+const CONTACTO = { whatsapp: "5491130052608", email: "" };
 
 (function () {
   // Header con fondo al hacer scroll
@@ -35,7 +35,7 @@ const CONTACTO = { whatsapp: "", email: "" };
 
   // Aparición suave de bloques (el contenido es visible si no hay JS)
   if ("IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const targets = document.querySelectorAll(".section-head, .about-grid, .values, .eco-head, .eco-brands, .process, .project-card, .pd-grid, .gallery figure, .done-grid, .inv-grid, .contact-grid");
+    const targets = document.querySelectorAll(".section-head, .about-grid, .values, .eco-head, .eco-brands, .process, .project-card, .pd-grid, .gallery figure, .amenities figure, .unit, .unit-table, .planviewer, .done-grid, .inv-grid, .contact-grid");
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
     }, { rootMargin: "0px 0px -8% 0px" });
@@ -48,22 +48,45 @@ const CONTACTO = { whatsapp: "", email: "" };
     document.documentElement.classList.add("js-reveal");
   }
 
+  // Visor de planos (pestañas)
+  document.querySelectorAll(".planviewer").forEach((pv) => {
+    const img = pv.querySelector(".pv-stage img");
+    const cap = pv.querySelector(".pv-stage figcaption");
+    pv.querySelectorAll(".pv-tab").forEach((tab) =>
+      tab.addEventListener("click", () => {
+        pv.querySelectorAll(".pv-tab").forEach((t) => t.setAttribute("aria-selected", "false"));
+        tab.setAttribute("aria-selected", "true");
+        img.src = tab.dataset.src;
+        img.alt = tab.dataset.cap;
+        cap.textContent = tab.dataset.cap;
+      })
+    );
+  });
+
   // Lightbox
   const lb = document.getElementById("lightbox");
   const lbImg = document.getElementById("lb-img");
   const lbCap = document.getElementById("lb-cap");
   let group = [], idx = 0;
   const show = () => {
-    const img = group[idx];
-    lbImg.src = img.currentSrc || img.src;
-    lbImg.alt = img.alt;
-    lbCap.textContent = img.alt + "  ·  " + (idx + 1) + " / " + group.length;
+    const it = group[idx];
+    lbImg.src = it.src;
+    lbImg.alt = it.alt;
+    lbCap.textContent = it.alt + (group.length > 1 ? "  ·  " + (idx + 1) + " / " + group.length : "");
   };
   document.querySelectorAll("[data-lightbox]").forEach((img) =>
     img.addEventListener("click", () => {
-      group = Array.from(document.querySelectorAll('[data-lightbox="' + img.dataset.lightbox + '"]'))
-        .filter((el, i, arr) => arr.findIndex((o) => o.src === el.src) === i);
-      idx = group.findIndex((o) => o.src === img.src);
+      const pv = img.closest(".planviewer");
+      if (pv) {
+        group = Array.from(pv.querySelectorAll(".pv-tab")).map((t) => ({ src: t.dataset.src, alt: t.dataset.cap }));
+        idx = Math.max(0, Array.from(pv.querySelectorAll(".pv-tab")).findIndex((t) => t.getAttribute("aria-selected") === "true"));
+      } else {
+        const seen = new Set();
+        group = Array.from(document.querySelectorAll('[data-lightbox="' + img.dataset.lightbox + '"]'))
+          .filter((el) => !seen.has(el.src) && seen.add(el.src))
+          .map((el) => ({ src: el.currentSrc || el.src, alt: el.alt }));
+        idx = Math.max(0, group.findIndex((o) => o.src === (img.currentSrc || img.src)));
+      }
       show();
       lb.hidden = false;
       document.getElementById("lb-close").focus();
@@ -108,7 +131,7 @@ const CONTACTO = { whatsapp: "", email: "" };
       window.location.href = "mailto:" + CONTACTO.email + "?subject=" + encodeURIComponent("Consulta web: " + form.interes.value) + "&body=" + encodeURIComponent(texto);
       status.textContent = "Abrimos su correo con la consulta lista para enviar.";
     } else {
-      status.textContent = "Gracias. Mientras habilitamos este formulario, escríbanos por Instagram a @anba.inversiones.";
+      status.textContent = "Escríbanos al WhatsApp 11 3005-2608.";
     }
   });
 })();

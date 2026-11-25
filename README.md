@@ -12,7 +12,5 @@ Sitio estático (HTML + CSS + JS, sin dependencias) de Grupo ANBA: ANBA Inversio
 Settings → Pages → Source: "Deploy from a branch" → elegir la rama y la carpeta `/ (root)`.
 
 ## Pendiente
-- WhatsApp, email y dirección completa
-- Ficha técnica de Tejedor 263 (unidades, entrega, localidad)
-- Nombre, ubicación e información de la torre
 - Fotos de obras terminadas
+- Email de contacto (opcional; el formulario hoy envía por WhatsApp)
