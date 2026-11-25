@@ -1,6 +1,6 @@
 // Datos de contacto: completar cuando estén definidos.
 // whatsapp: solo números con código de país, ej. "5491112345678"
-const CONTACTO = { whatsapp: "5491130052608", email: "" };
+const CONTACTO = { whatsapp: "5491131039452", email: "" };
 
 (function () {
   // Header con fondo al hacer scroll
@@ -131,7 +131,7 @@ const CONTACTO = { whatsapp: "5491130052608", email: "" };
       window.location.href = "mailto:" + CONTACTO.email + "?subject=" + encodeURIComponent("Consulta web: " + form.interes.value) + "&body=" + encodeURIComponent(texto);
       status.textContent = "Abrimos su correo con la consulta lista para enviar.";
     } else {
-      status.textContent = "Escríbanos al WhatsApp 11 3005-2608.";
+      status.textContent = "Escríbanos al WhatsApp 11 3103-9452.";
     }
   });
 })();
